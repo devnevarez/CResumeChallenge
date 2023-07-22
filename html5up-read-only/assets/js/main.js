@@ -160,11 +160,18 @@
 
 		// counter
 		const counter = document.querySelector(".counter-number");
-		async function updateCounter() {
-		  let response = await fetch("https://g4tjoteu2cait6kzhpuwsg5whu0bwpua.lambda-url.us-east-1.on.aws/")
-		  let data = await response.json();
-		  counter.innerHTML = ` Views: ${data}`;
-		}
-		
-		updateCounter();
+
+async function updateCounter() {
+  try {
+    let response = await fetch("https://g4tjoteu2cait6kzhpuwsg5whu0bwpua.lambda-url.us-east-1.on.aws/");
+    let data = await response.json();
+    let views = JSON.parse(data.body).views; // Parse the JSON string and access the 'views' field
+    counter.innerHTML = `Views: ${views}`;
+  } catch (error) {
+    console.error("Error fetching views:", error);
+  }
+}
+
+updateCounter();
+
 		
