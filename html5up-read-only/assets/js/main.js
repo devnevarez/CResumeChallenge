@@ -158,17 +158,26 @@
 
 })(jQuery);
 
-		// counter
-		const counter = document.querySelector(".counter-number");
+		// ... other code ...
 
 async function updateCounter() {
   try {
     let response = await fetch("https://g4tjoteu2cait6kzhpuwsg5whu0bwpua.lambda-url.us-east-1.on.aws/");
     let data = await response.json();
-    let views = JSON.parse(data.body).views; // Parse the JSON string and access the 'views' field
-    counter.innerHTML = `Views: ${views}`;
+    if (data && data.views !== undefined) {
+      let views = parseInt(data.views);
+      if (!isNaN(views)) {
+        let counter = document.querySelector(".counter-number");
+        counter.innerHTML = `Views: ${views}`;
+        return;
+      }
+    }
+    throw new Error("Invalid response format");
   } catch (error) {
     console.error("Error fetching views:", error);
+    // Optionally, display an error message on the webpage if the view count cannot be fetched
+    // let counter = document.querySelector(".counter-number");
+    // counter.innerHTML = "Error fetching views";
   }
 }
 
